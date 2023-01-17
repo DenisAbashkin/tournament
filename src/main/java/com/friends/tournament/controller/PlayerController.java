@@ -12,7 +12,7 @@ import java.util.List;
  * Контроллер для работы с сущностью игрока
  */
 @RestController
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("https://tournament-web-service.onrender.com")
 public class PlayerController {
 
     @Autowired
