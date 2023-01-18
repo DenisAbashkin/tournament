@@ -24,7 +24,7 @@ public class PlayerController {
      * @param newPlayer новый игрок
      * @return сохранение игрока в репозиторий
      */
-    @PostMapping("/player")
+    @PostMapping("/addplayer")
     Player newPlayer(@RequestBody Player newPlayer) {
         return playerRepository.save(newPlayer);
     }
