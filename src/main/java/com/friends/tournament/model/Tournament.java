@@ -1,27 +1,46 @@
 package com.friends.tournament.model;
 
-import jakarta.persistence.*;
+import com.friends.tournament.entity.TournamentEntity;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Модель игрока
  */
-@Entity
 public class Tournament {
 
     /**
      * Идентификатор игрока
      */
-    @Id
-    @GeneratedValue
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "player_id")
-    private Player player;
-
+    /**
+     * Лист игроков турнира
+     */
+    private List<Player> players;
+    /**
+     * Название турнира
+     */
     private String name;
-
+    /**
+     * Тип турнира
+     */
     private int type;
+
+    /**
+     * Метод преобразовывает сущность турнира в модель турнира
+     *
+     * @param entity сущность турнира
+     * @return модель турнира
+     */
+    public static Tournament toModel(TournamentEntity entity) {
+        Tournament model = new Tournament();
+        model.setId(entity.getId());
+        model.setName(entity.getName());
+        model.setType(entity.getType());
+        model.setPlayers(entity.getPlayers().stream().map(Player::toModel).collect(Collectors.toList()));
+        return model;
+    }
 
     public String getName() {
         return name;
@@ -39,12 +58,12 @@ public class Tournament {
         this.id = id;
     }
 
-    public Player getPlayer() {
-        return player;
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 
     public int getType() {

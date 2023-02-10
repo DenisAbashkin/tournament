@@ -1,10 +1,11 @@
 package com.friends.tournament.controller;
 
+import com.friends.tournament.entity.TournamentEntity;
+import com.friends.tournament.exception.AlreadyExistException;
 import com.friends.tournament.model.Tournament;
-import com.friends.tournament.repository.TournamentRepository;
+import com.friends.tournament.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.friends.tournament.exception.TournamentNotFoundException;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class TournamentController {
 
     @Autowired
-    private TournamentRepository tournamentRepository;
+    private TournamentService tournamentService;
 
     /**
      * Метод добавляет новый турнир
@@ -25,8 +26,8 @@ public class TournamentController {
      * @return сохранение турнира в репозиторий
      */
     @PostMapping("/addtournament")
-    Tournament newTournament(@RequestBody Tournament newTournament) {
-        return tournamentRepository.save(newTournament);
+    TournamentEntity addTournament(@RequestBody TournamentEntity newTournament) throws AlreadyExistException {
+        return tournamentService.addTournament(newTournament);
     }
 
     /**
@@ -36,7 +37,7 @@ public class TournamentController {
      */
     @GetMapping("/tournaments")
     List<Tournament> getAllTournaments() {
-        return tournamentRepository.findAll();
+        return tournamentService.getAllTournaments();
     }
 
 
@@ -48,8 +49,7 @@ public class TournamentController {
      */
     @GetMapping("/tournament/{id}")
     Tournament getTournamentById(@PathVariable Long id) {
-        return tournamentRepository.findById(id)
-                .orElseThrow(() -> new TournamentNotFoundException(id));
+        return tournamentService.findById(id);
     }
 
     /**
@@ -60,10 +60,6 @@ public class TournamentController {
      */
     @DeleteMapping("/tournament/{id}")
     String deleteTournament(@PathVariable Long id) {
-        if (!tournamentRepository.existsById(id)) {
-            throw new TournamentNotFoundException(id);
-        }
-        tournamentRepository.deleteById(id);
-        return "Турнир с id " + id + "был удален";
+        return tournamentService.deleteTournament(id);
     }
 }

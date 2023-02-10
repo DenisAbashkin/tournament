@@ -1,33 +1,33 @@
 package com.friends.tournament.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.friends.tournament.entity.PlayerEntity;
 
 /**
  * Модель игрока
  */
-@Entity
 public class Player {
 
     /**
      * Идентификатор игрока
      */
-    @Id
-    @GeneratedValue
     private Long id;
     /**
-     * Никнейм
-     */
-    private String username;
-    /**
-     * Имя
+     * Имя игрока в турнире
      */
     private String name;
+
     /**
-     * Почта
+     * Метод преобразовывает сущность игрока в модель игрока
+     *
+     * @param entity сущность игрока
+     * @return модель игрока
      */
-    private String email;
+    public static Player toModel(PlayerEntity entity) {
+        Player model = new Player();
+        model.setId(entity.getId());
+        model.setName(entity.getName());
+        return model;
+    }
 
     public Long getId() {
         return id;
@@ -35,14 +35,6 @@ public class Player {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getName() {
@@ -53,11 +45,4 @@ public class Player {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

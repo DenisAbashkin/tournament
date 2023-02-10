@@ -1,8 +1,9 @@
 package com.friends.tournament.controller;
 
-import com.friends.tournament.exception.PlayerNotFoundException;
+import com.friends.tournament.entity.PlayerEntity;
+import com.friends.tournament.exception.AlreadyExistException;
 import com.friends.tournament.model.Player;
-import com.friends.tournament.repository.PlayerRepository;
+import com.friends.tournament.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class PlayerController {
 
     @Autowired
-    private PlayerRepository playerRepository;
+    private PlayerService playerService;
 
     /**
      * Метод добавляет нового игрока
@@ -25,8 +26,8 @@ public class PlayerController {
      * @return сохранение игрока в репозиторий
      */
     @PostMapping("/addplayer")
-    Player newPlayer(@RequestBody Player newPlayer) {
-        return playerRepository.save(newPlayer);
+    PlayerEntity addPlayer(@RequestBody PlayerEntity newPlayer) throws AlreadyExistException {
+        return playerService.addPlayer(newPlayer);
     }
 
     /**
@@ -36,7 +37,7 @@ public class PlayerController {
      */
     @GetMapping("/players")
     List<Player> getAllPlayers() {
-        return playerRepository.findAll();
+        return playerService.getAllPlayers();
     }
 
     /**
@@ -47,8 +48,7 @@ public class PlayerController {
      */
     @GetMapping("/player/{id}")
     Player getPlayerById(@PathVariable Long id) {
-        return playerRepository.findById(id)
-                .orElseThrow(() -> new PlayerNotFoundException(id));
+        return playerService.findById(id);
     }
 
     /**
@@ -57,16 +57,9 @@ public class PlayerController {
      * @param id индентифекатор игрока
      * @return ошибку или сохраняет изменения
      */
-    @PutMapping("/player/{id}")
-    Player updatePlayer(@RequestBody Player newPlayer, @PathVariable Long id) {
-        return playerRepository.findById(id)
-                .map(player -> {
-                    player.setName(newPlayer.getName());
-                    player.setUsername(newPlayer.getUsername());
-                    player.setEmail(newPlayer.getEmail());
-                    return playerRepository.save(player);
-                })
-                .orElseThrow(() -> new PlayerNotFoundException(id));
+    @PutMapping("/updateplayer/{id}")
+    PlayerEntity updatePlayer(@RequestBody PlayerEntity newPlayer, @PathVariable Long id) {
+        return playerService.updatePlayer(newPlayer, id);
     }
 
     /**
@@ -77,10 +70,6 @@ public class PlayerController {
      */
     @DeleteMapping("/player/{id}")
     String deletePlayer(@PathVariable Long id) {
-        if (!playerRepository.existsById(id)) {
-            throw new PlayerNotFoundException(id);
-        }
-        playerRepository.deleteById(id);
-        return "Player with id " + id + "has been deleted";
+        return playerService.deletePlayer(id);
     }
 }
