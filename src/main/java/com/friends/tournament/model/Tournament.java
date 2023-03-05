@@ -5,6 +5,8 @@ import com.friends.tournament.entity.TournamentEntity;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.util.List;
+
 /**
  * Модель игрока
  */
@@ -14,18 +16,27 @@ public class Tournament {
      * Идентификатор игрока
      */
     private Long id;
+
     /**
      * Лист игроков турнира
      */
     private List<Player> players;
+
+    /**
+     * Лист игроков турнира
+     */
+    private  List<Discipline> disciplines;
+
     /**
      * Название турнира
      */
     private String name;
+
     /**
      * Тип турнира
      */
     private int type;
+
 
     /**
      * Метод преобразовывает сущность турнира в модель турнира
@@ -39,6 +50,7 @@ public class Tournament {
         model.setName(entity.getName());
         model.setType(entity.getType());
         model.setPlayers(entity.getPlayers().stream().map(Player::toModel).collect(Collectors.toList()));
+        model.setDisciplines(entity.getDisciplines().stream().map(Discipline::toModel).collect(Collectors.toList()));
         return model;
     }
 
@@ -64,6 +76,12 @@ public class Tournament {
 
     public void setPlayers(List<Player> players) {
         this.players = players;
+    }
+
+    public List<Discipline> getDisciplines() { return disciplines; }
+
+    public void setDisciplines(List<Discipline> disciplines) {
+        this.disciplines = disciplines;
     }
 
     public int getType() {

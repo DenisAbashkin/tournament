@@ -23,6 +23,13 @@ public class TournamentEntity {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "tournament_id")
     private List<PlayerEntity> players;
+
+    /**
+     * Лист дисциплины турнира
+     */
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tournament_id")
+    private List<DisciplineEntity> disciplines;
     /**
      * Название турнира
      */
@@ -55,6 +62,10 @@ public class TournamentEntity {
     public void setPlayers(List<PlayerEntity> players) {
         this.players = players;
     }
+
+    public List<DisciplineEntity> getDisciplines() { return disciplines; }
+
+    public void setDisciplines(List<DisciplineEntity> disciplines) { this.disciplines = disciplines; }
 
     public int getType() {
         return type;
