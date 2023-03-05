@@ -27,7 +27,6 @@ public class DisciplineController {
      * @param newDiscipline новая дисциплина
      * @return сохранение дисциплины в репозиторий
      */
-
     @PostMapping("/adddiscipline")
     Discipline newDiscipline(@RequestBody Discipline newDiscipline) throws DisciplineNotFoundException{
         return disciplineRepository.save(newDiscipline);
